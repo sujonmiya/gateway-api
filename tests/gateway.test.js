@@ -237,5 +237,4 @@ after(async () => {
     process.env.NODE_ENV = NODE_ENV
     await databaseService.disconnect()
     await mongod.stop()
-    console.log('after')
 })
