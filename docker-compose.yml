@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  api:
+    image: sujonam/gateway-api
+    build: .
+    restart: on-failure
+    ports:
+      - ${PORT}:${PORT}
+    env_file:
+      - .env.dist
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: on-failure
+    env_file:
+      - .env.dist
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${DB_PASS}
+      - MONGO_INITDB_DATABASE=${DB_NAME}
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
