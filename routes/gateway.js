@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config()
 
 const GatewayService = require('../service/GatewayService')
 const DeviceService = require('../service/DeviceService')
@@ -8,9 +9,12 @@ const {
   HTTP_STATUS_NO_CONTENT
 } = require('../common/consts')
 
+const {MAX_ALLOWED_DEVICES} = process.env
+const maxAllowed = parseInt(MAX_ALLOWED_DEVICES, 10)
+
 const router = express.Router()
 const gatewayService = new GatewayService()
-const deviceService = new DeviceService()
+const deviceService = new DeviceService(maxAllowed)
 
 router.route('/')
     .get(async (req, res, next) => {

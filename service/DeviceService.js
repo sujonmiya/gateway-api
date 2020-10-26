@@ -6,10 +6,11 @@ const {
   ERROR_MSG_NOT_FOUND
 } = require('../common/consts')
 
-const {MAX_ALLOWED_DEVICES} = process.env
-const maxAllowed = parseInt(MAX_ALLOWED_DEVICES, 10)
-
 class DeviceService {
+
+  constructor(maxAllowed) {
+    this.maxAllowed = maxAllowed
+  }
 
   findByGateway(gateway) {
     return Device.find({gateway}).limit(10)
@@ -42,8 +43,8 @@ class DeviceService {
 
     const total = await Device.countDocuments({gateway})
 
-    if (total === maxAllowed) {
-      throw new GatewayError(`maximum ${maxAllowed} peripheral devices are allowed`)
+    if (total === this.maxAllowed) {
+      throw new GatewayError(`maximum ${this.maxAllowed} peripheral devices are allowed`)
     }
 
     await device.save()
